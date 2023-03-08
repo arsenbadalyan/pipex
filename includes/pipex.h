@@ -6,7 +6,7 @@
 /*   By: arsbadal <arsbadal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:06:32 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/03/05 20:40:09 by arsbadal         ###   ########.fr       */
+/*   Updated: 2023/03/08 20:26:55 by arsbadal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,15 @@
 #include <string.h>
 #include <sys/wait.h>
 #include "libft.h"
+#include "get_next_line.h"
 
 
 // Execute Pipe
 void execute_pipe(int argc, char **argv, char **envp, char **paths);
+
+// Execute here_doc
+void execute_here_doc(int argc, char **argv);
+char *ft_realloc(char **str1, char **str2);
 
 // Helpers
 char *read_file(char *path);

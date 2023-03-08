@@ -10,7 +10,7 @@ LIBS   = -I ./includes/
 # Compiled directories
 SRC = src
 OBJ = obj
-SUBDIRS = main utils
+SUBDIRS = main utils gnl
 
 # Folder directions
 SRC_DIR = $(foreach dir, $(SUBDIRS), $(addprefix $(SRC)/, $(dir)))
