@@ -51,6 +51,22 @@ char	*exec_join_check(char *path, char **command)
 	return (0);
 }
 
+char **split_cmd(char *command)
+{
+	char **splited_cmd;
+
+	splited_cmd = NULL;
+	splited_cmd = ft_split(command, ' ');
+	if (!splited_cmd)
+		return (NULL);
+	if (!splited_cmd[0] || !splited_cmd[0][0])
+	{
+		free_d(&splited_cmd);
+		return (NULL);
+	}
+	return (splited_cmd);
+}
+
 char	*is_command_executable(char *command, char **paths)
 {
 	size_t	i;
@@ -58,12 +74,9 @@ char	*is_command_executable(char *command, char **paths)
 	char	*check_path;
 
 	i = 0;
-	splited_cmd = NULL;
-	splited_cmd = ft_split(command, ' ');
-	if (!splited_cmd)
+	splited_cmd = split_cmd(command);
+	if(!splited_cmd)
 		return (NULL);
-	if (!splited_cmd[0] || !splited_cmd[0][0])
-		return (free_d(&splited_cmd));
 	if (!access(splited_cmd[0], X_OK))
 	{
 		check_path = ft_strdup(splited_cmd[0]);
@@ -75,6 +88,7 @@ char	*is_command_executable(char *command, char **paths)
 		check_path = exec_join_check(paths[i], splited_cmd);
 		if (check_path)
 			return (check_path);
+		free_s(&check_path);
 		i++;
 	}
 	return (free_d(&splited_cmd));

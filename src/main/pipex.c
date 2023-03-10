@@ -29,49 +29,50 @@ char **find_path(char **envp)
 	return (NULL);
 }
 
-int main(int argc, char **argv, char **envp)
+void duplicate_fd(int fd_from, int fd_to)
+{
+	dup2(fd_from, fd_to);
+	close(fd_from);
+}
+
+void file_check(int *argc, char ***argv)
 {
 	int fd0;
 	int fd1;
-	int flags;
+	int last_index;
 
-	execute_here_doc(argc, argv);
-	// perror(test);
-	// flags = O_RDWR | O_APPEND | O_CREAT;
-	// fd0 = open("in", flags, 0777);
-	// fd1 = open("out", flags, 0777);
-	// dup2(0, fd0);
-	// dup2(1, fd1);
-	// write(fd1, "pipe heredoc>", 13);
-	// test = ;
-	// test = get_next_line(fd0);
-	// while(test)
-	// {
-	// 	test = get_next_line(fd0);
-	// 	if(ft_strchr(test, '\n'))
-	// 		write(fd1, "pipe heredoc>", 13);
-	// }
-	// int fd;
-	// int fd2;
-	// char **paths;
+	last_index = (*argc - 1);
+	if (!access(*(*argv + last_index), F_OK) && access(*(*argv + last_index), W_OK))
+		write_exception(13);
+	if (access(**argv, R_OK) == -1 && !ft_strcmp(*(*argv + 1), "here_doc"))
+		write_exception(13);
+	if (!ft_strcmp(*(*argv + 1), "here_doc"))
+	{
+		fd1 = open(*(*argv + last_index), O_WRONLY | O_APPEND | O_CREAT, 0755);
+		execute_here_doc(argc, argv);
+		duplicate_fd(1, fd1);
+		return;
+	}
+	fd0 = open(*(*argv + last_index), O_RDONLY);
+	fd1 = open(*(*argv + last_index), O_WRONLY | O_TRUNC | O_CREAT, 0755);
+	duplicate_fd(0, fd0);
+	duplicate_fd(1, fd1);
+	*argv++;
+	*argc--;
+}
+
+int main(int argc, char **argv, char **envp)
+{
+	char **paths;
 	
-	// // if(argc < 5)
-	// //     return (1);
-	// if(!access(argv[1], R_OK))
-	// {
-	// 	paths = find_path(envp);
-	// 	if(!paths)
-	// 		return (0);
-	// 	execute_pipe(argc, argv, envp, paths);
-	// 	// int i = 0;
-	// 	// while(paths[i])
-	// 	// {
-	// 	// 	printf("%s\n", paths[i]);
-	// 	// 	i++;
-	// 	// }
-	// } else if(!ft_strcmp(argv[1], "here_doc"))
-	// {
-
-	// }
+	if(argc < 5)
+		return (1);
+	paths = find_path(envp);
+	if (!paths)
+		return (0);
+	file_check(&argc, &argv);
+	printf("%d - %s\n", argc, argv[0]);
+	// execute_pipe(argc, argv, envp, paths);
+	// system("leaks pipex");
 	return (0);
 }

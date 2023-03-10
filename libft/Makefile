@@ -20,6 +20,10 @@ SRC = ft_atoi.c ft_bzero.c ft_calloc.c ft_isalnum.c ft_isalpha.c \
 # Object Files
 OBJ = $(patsubst %.c, %.o, $(SRC))
 
+# Colors
+RESET  = \033[0m
+GREEN  = \033[32m
+
 # Rules
 all: $(NAME)
 	@echo ""
@@ -29,6 +33,7 @@ $(NAME): Makefile $(OBJ)
 	@$(RUN) $@
 
 %.o: %.c
+	@echo "${GREEN}Compiling $^${RESET}"
 	@$(CC) $(FLAGS) $(LIBS) -c $< -o $@
 
 clean:

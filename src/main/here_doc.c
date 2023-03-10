@@ -1,22 +1,21 @@
 #include "pipex.h"
 
-void wait_to_limiter(int argc, char **argv, int fd)
+void wait_to_limiter(int argc, char **argv, char *limiter, int fd)
 {
-	char *limiter;
 	char *buffer;
-	char *temp;
 
-	limiter = argv[1];
-	buffer = NULL;
 	write(1, ">", 1);
 	while(1)
 	{
-		temp = get_next_line(0);
-		buffer = ft_realloc(&buffer, &temp);
-		if(temp && temp[0] == '\n')
+		buffer = get_next_line(0);
+		if (!buffer)
 		{
-			free_s(&temp);
-			if(!ft_strncmp(buffer, limiter, ft_strlen(limiter)) && ((ft_strlen(buffer) - 1) == ft_strlen(limiter)))
+			perror("memory");
+			exit(1);
+		}
+		if (buffer && ft_strchr(buffer, '\n'))
+		{
+			if (!ft_strncmp(buffer, limiter, ft_strlen(limiter)) && ((ft_strlen(buffer) - 1) == ft_strlen(limiter)))
 			{
 				free_s(&buffer);
 				break;
@@ -29,11 +28,15 @@ void wait_to_limiter(int argc, char **argv, int fd)
 	}	
 }
 
-void execute_here_doc(int argc, char **argv)
+void execute_here_doc(int *argc, char ***argv)
 {
 	int fd;
 	char *file;
 
 	fd = open(".read_here_doc", O_WRONLY | O_CREAT | O_TRUNC, 0755);
-	wait_to_limiter(argc, argv, fd);
+	wait_to_limiter(*argc, *argv, *((*argv) + 2), fd);
+	dup2(fd, 0);
+	close(fd);
+	*argc-=2;
+	*argv+=2;
 }

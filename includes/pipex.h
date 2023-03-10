@@ -29,7 +29,8 @@
 void execute_pipe(int argc, char **argv, char **envp, char **paths);
 
 // Execute here_doc
-void execute_here_doc(int argc, char **argv);
+void wait_to_limiter(int argc, char **argv, char *limiter, int fd);
+void execute_here_doc(int *argc, char ***argv);
 char *ft_realloc(char **str1, char **str2);
 
 // Helpers
@@ -40,5 +41,8 @@ char *is_command_executable(char *command, char **paths);
 // Free functions
 char *free_s(char **addr);
 char *free_d(char ***addr);
+
+// Utilities
+void write_exception(int errno);
 
 #endif

@@ -32,7 +32,7 @@ YELLOW = \033[33m
 all: $(NAME)
 
 $(NAME): WAIT_COMPILE_MSG $(OBJS)
-	@echo "${GREEN}Compiling Libft...${RESET}"
+	@echo "${GREEN}-> Compiling LIBFT...${RESET}"
 	@make -C $(LIBFT) all
 	@$(GCC) $(CFLAGS) $(LIBS) -L$(LIBFT) -lft $(OBJS) -o $(NAME)
 	@make DONE_MSG

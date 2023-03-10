@@ -40,7 +40,7 @@ char	*alloc_space(char **cache)
 
 	if ((*cache))
 	{
-		n_l = ft_strjoin(ft_strdup(""), (*cache));
+		n_l = ft_strjoin_gnl(ft_strdup(""), (*cache));
 		free_me(cache);
 	}
 	else
@@ -61,14 +61,14 @@ char	*start_read(int fd, char **cache)
 		if (readed_res <= 0)
 			break ;
 		tmp[readed_res] = '\0';
-		n_l = ft_strjoin(n_l, tmp);
+		n_l = ft_strjoin_gnl(n_l, tmp);
 		if (!n_l)
 			return (NULL);
-		if (ft_strchr(n_l, '\n') != -1)
+		if (ft_strchr_gnl(n_l, '\n') != -1)
 		{
-			(*cache) = ft_substr(n_l, ft_strchr(n_l, '\n') + 1,
+			(*cache) = ft_substr(n_l, ft_strchr_gnl(n_l, '\n') + 1,
 					ft_strlen(n_l) + 1);
-			n_l = free_substr(n_l, 0, ft_strchr(n_l, '\n') + 1);
+			n_l = free_substr(n_l, 0, ft_strchr_gnl(n_l, '\n') + 1);
 			if (!(*cache) || !n_l)
 				return (NULL);
 			return (n_l);
@@ -84,10 +84,10 @@ char	*get_next_line(int fd)
 
 	if (BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0 || fd < 0)
 		return (NULL);
-	if (cache && ft_strlen(cache) && ft_strchr(cache, '\n') != -1)
+	if (cache && ft_strlen(cache) && ft_strchr_gnl(cache, '\n') != -1)
 	{
-		next_line = ft_substr(cache, 0, ft_strchr(cache, '\n') + 1);
-		cache = free_substr(cache, ft_strchr(cache, '\n')
+		next_line = ft_substr(cache, 0, ft_strchr_gnl(cache, '\n') + 1);
+		cache = free_substr(cache, ft_strchr_gnl(cache, '\n')
 				+ 1, ft_strlen(cache) + 1);
 		return (next_line);
 	}
