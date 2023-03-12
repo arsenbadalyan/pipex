@@ -50,13 +50,13 @@ void file_check(int *argc, char ***argv)
 	{
 		fd1 = open(*(*argv + last_index), O_WRONLY | O_APPEND | O_CREAT, 0755);
 		execute_here_doc(argc, argv);
-		duplicate_fd(1, fd1);
+		duplicate_fd(fd1, 1);
 		return;
 	}
 	fd0 = open(*(*argv + last_index), O_RDONLY);
 	fd1 = open(*(*argv + last_index), O_WRONLY | O_TRUNC | O_CREAT, 0755);
-	duplicate_fd(0, fd0);
-	duplicate_fd(1, fd1);
+	duplicate_fd(fd0, 0);
+	duplicate_fd(fd1, 1);
 	*argv++;
 	*argc--;
 }
@@ -71,8 +71,7 @@ int main(int argc, char **argv, char **envp)
 	if (!paths)
 		return (0);
 	file_check(&argc, &argv);
-	printf("%d - %s\n", argc, argv[0]);
-	// execute_pipe(argc, argv, envp, paths);
+	execute_pipe(argc, argv, envp, paths);
 	// system("leaks pipex");
 	return (0);
 }

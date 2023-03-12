@@ -19,39 +19,38 @@ void execute_pipe(int argc, char **argv, char **envp, char **paths)
 {
 	size_t index;
 	char *path;
-	char **splited_cmd;
-	char *concated;
+	char **command_arr;
 
 	index = 1;
 	while(index < argc)
 	{
-		path = is_command_executable(argv[index], paths);
+		command_arr = ft_split(argv[index], ' ');
+			path = is_command_executable(command_arr[0], paths);
 		if(!path)
 			write_exception(404);
-		
+		if(index == (argc - 1))
+			pipe_commands(argv, path, command_arr);
+		else
+			execve(path, command_arr, NULL);
 		index++;
 	}
 }
 
-// void pipe_commands(int argc, char **argv, )
-// {
-// 	int pid;
-// 	int fd[2];
-
-// 	pipe(fd);
-// 	pid = fork();
-// 	// if(pid == -1)
-// 	// {
-// 	// 	perror("fork");
-// 	// 	exit(1);
-// 	// }
-// 	if(pid)
-// 	{
-
-// 	}
-// 	else {
-// 		close(fd[1]);
-
-// 		close(fd[0]);
-// 	}
-// }
+void pipe_commands(char **argv, char *path, char **command)
+{
+	int pid;
+	int fd[2];
+	
+	pipe(fd);
+	pid = fork();
+	if(pid)
+	{
+		close(fd[1]);
+		dup2(fd[0], 0);
+	}
+	else {
+		close(fd[0]);
+		dup2(fd[1], 1);
+		execve(path, command, NULL);
+	}
+}

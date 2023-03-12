@@ -27,6 +27,7 @@
 
 // Execute Pipe
 void execute_pipe(int argc, char **argv, char **envp, char **paths);
+void pipe_commands(char **argv, char *path, char **command);
 
 // Execute here_doc
 void wait_to_limiter(int argc, char **argv, char *limiter, int fd);
