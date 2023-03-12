@@ -33,7 +33,7 @@ $(NAME): Makefile $(OBJ)
 	@$(RUN) $@
 
 %.o: %.c
-	@echo "${GREEN}Compiling $^${RESET}"
+	@echo "${YELLOW}Compiling $^${RESET}"
 	@$(CC) $(FLAGS) $(LIBS) -c $< -o $@
 
 clean:

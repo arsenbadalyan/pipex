@@ -6,31 +6,11 @@
 /*   By: arsbadal <arsbadal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 20:12:33 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/03/05 20:40:27 by arsbadal         ###   ########.fr       */
+/*   Updated: 2023/03/12 23:04:50 by arsbadal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-char	*read_file(char *path)
-{
-	size_t	size;
-	int		fd;
-	char	c;
-	char	*output;
-
-	size = 0;
-	fd = open(path, O_RDONLY);
-	while (read(fd, &c, 1))
-		size++;
-	close(fd);
-	output = (char *)malloc(sizeof(char) * (size + 1));
-	if (!output)
-		return (NULL);
-	fd = open(path, O_RDONLY);
-	read(fd, output, size);
-	return (output);
-}
 
 char	*exec_join_check(char *path, char **command)
 {
@@ -45,26 +25,10 @@ char	*exec_join_check(char *path, char **command)
 	if (!access(check_path, X_OK))
 	{
 		free_d(&command);
-		return (check_path);	
+		return (check_path);
 	}
 	free_s(&check_path);
 	return (0);
-}
-
-char **split_cmd(char *command)
-{
-	char **splited_cmd;
-
-	splited_cmd = NULL;
-	splited_cmd = ft_split(command, ' ');
-	if (!splited_cmd)
-		return (NULL);
-	if (!splited_cmd[0] || !splited_cmd[0][0])
-	{
-		free_d(&splited_cmd);
-		return (NULL);
-	}
-	return (splited_cmd);
 }
 
 char	*is_command_executable(char *command, char **paths)
@@ -75,7 +39,7 @@ char	*is_command_executable(char *command, char **paths)
 
 	i = 0;
 	splited_cmd = split_cmd(command);
-	if(!splited_cmd)
+	if (!splited_cmd)
 		return (NULL);
 	if (!access(splited_cmd[0], X_OK))
 	{
@@ -92,4 +56,55 @@ char	*is_command_executable(char *command, char **paths)
 		i++;
 	}
 	return (free_d(&splited_cmd));
+}
+
+char	**find_path(char **envp)
+{
+	size_t	i;
+	char	path[6];
+	char	**paths;
+
+	i = 0;
+	ft_memcpy(&path, "PATH=\0", 6);
+	while (envp[i])
+	{
+		if (ft_strncmp(envp[i], path, ft_strlen(path)))
+		{
+			i++;
+			continue ;
+		}
+		break ;
+	}
+	if (!ft_strncmp(envp[i], path, ft_strlen(path)))
+	{
+		envp[i][3] = '.';
+		envp[i][4] = ':';
+		envp[i] += 3;
+		paths = ft_split(envp[i], ':');
+		return (paths);
+	}
+	return (NULL);
+}
+
+void	file_check(int *argc, char ***argv)
+{
+	int	fd0;
+	int	fd1;
+	int	last_index;
+
+	last_index = (*argc - 1);
+	permission_check(argc, argv);
+	if (!ft_strcmp((*argv)[1], "here_doc"))
+	{
+		fd1 = open((*argv)[last_index], O_WRONLY | O_APPEND | O_CREAT, 0755);
+		execute_here_doc(argc, argv);
+		duplicate_fd(fd1, 1);
+		return ;
+	}
+	fd0 = open((*argv)[1], O_RDONLY);
+	fd1 = open((*argv)[last_index], O_WRONLY | O_TRUNC | O_CREAT, 0755);
+	duplicate_fd(fd0, 0);
+	duplicate_fd(fd1, 1);
+	*argv += 2;
+	*argc -= 3;
 }

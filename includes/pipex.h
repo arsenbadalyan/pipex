@@ -6,44 +6,49 @@
 /*   By: arsbadal <arsbadal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:06:32 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/03/08 20:26:55 by arsbadal         ###   ########.fr       */
+/*   Updated: 2023/03/12 20:21:59 by arsbadal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PIPEX_H
-#define PIPEX_H
+# define PIPEX_H
 
 // Standard C Libs
-#include <stdio.h> // TODO: DELETE
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <fcntl.h>
-#include <string.h>
-#include <sys/wait.h>
-#include "libft.h"
-#include "get_next_line.h"
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <sys/types.h>
+# include <fcntl.h>
+# include <string.h>
+# include <sys/wait.h>
+# include "libft.h"
+# include "get_next_line.h"
 
+// Here Doc FileName
+# define IN_FILE ".read_here_doc"
 
 // Execute Pipe
-void execute_pipe(int argc, char **argv, char **envp, char **paths);
-void pipe_commands(char **argv, char *path, char **command);
+void	pipe_commands(char **argv, char *path, char **command, char **envp);
+void	execute_pipe(int argc, char **argv, char **envp, char **paths);
 
 // Execute here_doc
-void wait_to_limiter(int argc, char **argv, char *limiter, int fd);
-void execute_here_doc(int *argc, char ***argv);
-char *ft_realloc(char **str1, char **str2);
+void	wait_to_limiter(int argc, char **argv, char *limiter, int fd);
+void	execute_here_doc(int *argc, char ***argv);
 
 // Helpers
-char *read_file(char *path);
 char	*exec_join_check(char *path, char **command);
-char *is_command_executable(char *command, char **paths);
+char	*is_command_executable(char *command, char **paths);
+char	**find_path(char **envp);
+void	file_check(int *argc, char ***argv);
 
 // Free functions
-char *free_s(char **addr);
-char *free_d(char ***addr);
+char	*free_s(char **addr);
+char	*free_d(char ***addr);
 
 // Utilities
-void write_exception(int errno);
+void	write_exception(int errno, char *addn, char *addn2);
+void	duplicate_fd(int fd_from, int fd_to);
+char	**split_cmd(char *command);
+void	permission_check(int *argc, char ***argv);
 
 #endif

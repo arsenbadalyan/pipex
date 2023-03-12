@@ -31,6 +31,8 @@ YELLOW = \033[33m
 
 all: $(NAME)
 
+bonus: all
+
 $(NAME): WAIT_COMPILE_MSG $(OBJS)
 	@echo "${GREEN}-> Compiling LIBFT...${RESET}"
 	@make -C $(LIBFT) all
@@ -39,7 +41,7 @@ $(NAME): WAIT_COMPILE_MSG $(OBJS)
 
 $(OBJ)/%.o: $(SRC)/%.c
 	@mkdir -p $(OBJ) $(OBJ_DIR)
-	@echo "${GREEN}Compiling $^${RESET}"
+	@echo "${YELLOW}Compiling $^${RESET}"
 	@$(GCC) $(CFLAGS) $(LIBS) -c $< -o $@
 
 clean: DELETE_OBJ_MSG
