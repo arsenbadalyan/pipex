@@ -24,6 +24,5 @@ int	main(int argc, char **argv, char **envp)
 		return (0);
 	execute_pipe(argc, argv, envp, paths);
 	unlink(IN_FILE);
-	system("leaks pipex");
 	return (0);
 }

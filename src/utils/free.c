@@ -27,7 +27,10 @@ char	*free_d(char ***addr)
 	if (*addr)
 	{
 		while ((*addr)[i])
+		{
 			free_s(&((*addr)[i]));
+			i++;
+		}
 		free(*addr);
 		*addr = 0;
 	}
