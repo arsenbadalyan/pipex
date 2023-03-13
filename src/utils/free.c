@@ -24,10 +24,10 @@ char	*free_d(char ***addr)
 	size_t	i;
 
 	i = 0;
-	if (!(*addr))
+	if (*addr)
 	{
-		while (*addr[i])
-			free_s(&(*addr[i]));
+		while ((*addr)[i])
+			free_s(&((*addr)[i]));
 		free(*addr);
 		*addr = 0;
 	}

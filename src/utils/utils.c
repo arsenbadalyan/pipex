@@ -17,7 +17,7 @@ void	write_exception(int errno, char *addn, char *addn2)
 	char	*error;
 
 	if (errno == 404)
-		error = "command not found:";
+		error = "command not found: ";
 	else
 		error = strerror(errno);
 	ft_putstr_fd("zsh: ", 2);

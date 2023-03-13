@@ -28,11 +28,11 @@
 # define IN_FILE ".read_here_doc"
 
 // Execute Pipe
-void	pipe_commands(char **argv, char *path, char **command, char **envp);
+void	pipe_commands(char *path, char **command, char **envp);
 void	execute_pipe(int argc, char **argv, char **envp, char **paths);
 
 // Execute here_doc
-void	wait_to_limiter(int argc, char **argv, char *limiter, int fd);
+void	wait_to_limiter(char *limiter, int fd);
 void	execute_here_doc(int *argc, char ***argv);
 
 // Helpers

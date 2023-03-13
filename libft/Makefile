@@ -23,6 +23,7 @@ OBJ = $(patsubst %.c, %.o, $(SRC))
 # Colors
 RESET  = \033[0m
 GREEN  = \033[32m
+BLUE   = \033[34m
 
 # Rules
 all: $(NAME)
@@ -33,7 +34,7 @@ $(NAME): Makefile $(OBJ)
 	@$(RUN) $@
 
 %.o: %.c
-	@echo "${YELLOW}Compiling $^${RESET}"
+	@echo "${BLUE}Compiling $^${RESET}"
 	@$(CC) $(FLAGS) $(LIBS) -c $< -o $@
 
 clean:

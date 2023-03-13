@@ -14,7 +14,7 @@
 
 void	execute_pipe(int argc, char **argv, char **envp, char **paths)
 {
-	size_t	index;
+	int		index;
 	char	*path;
 	char	**command_arr;
 	pid_t	pid;
@@ -27,19 +27,20 @@ void	execute_pipe(int argc, char **argv, char **envp, char **paths)
 		if (!path)
 			write_exception(404, command_arr[0], 0);
 		if (index != (argc - 1))
-			pipe_commands(argv, path, command_arr, envp);
+			pipe_commands(path, command_arr, envp);
 		else
 		{
 			pid = fork();
 			if (!pid)
 				exit(execve(path, command_arr, envp));
 		}
+		free_s(&path);
 		free_d(&command_arr);
 		index++;
 	}
 }
 
-void	pipe_commands(char **argv, char *path, char **command, char **envp)
+void	pipe_commands(char *path, char **command, char **envp)
 {
 	int	pid;
 	int	fd[2];

@@ -12,7 +12,7 @@
 
 #include "pipex.h"
 
-void	wait_to_limiter(int argc, char **argv, char *limiter, int fd)
+void	wait_to_limiter(char *limiter, int fd)
 {
 	char	*buffer;
 
@@ -41,10 +41,9 @@ void	wait_to_limiter(int argc, char **argv, char *limiter, int fd)
 void	execute_here_doc(int *argc, char ***argv)
 {
 	int		fd;
-	char	*file;
 
 	fd = open(IN_FILE, O_WRONLY | O_CREAT | O_TRUNC, 0755);
-	wait_to_limiter(*argc, *argv, *((*argv) + 2), fd);
+	wait_to_limiter((*argv)[2], fd);
 	close(fd);
 	fd = open(IN_FILE, O_RDONLY);
 	duplicate_fd(fd, 0);
