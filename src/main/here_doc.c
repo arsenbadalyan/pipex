@@ -21,7 +21,7 @@ void	wait_to_limiter(char *limiter, int fd)
 	{
 		buffer = get_next_line(0);
 		if (!buffer)
-			write_exception(12, 0, 0);
+			write_exception(12, 0, 0, 1);
 		if (buffer && ft_strchr(buffer, '\n'))
 		{
 			if (!ft_strncmp(buffer, limiter, ft_strlen(limiter))
@@ -48,6 +48,7 @@ void	execute_here_doc(int *argc, char ***argv)
 	fd = open(IN_FILE, O_RDONLY);
 	duplicate_fd(fd, 0);
 	close(fd);
+	permission_check(argc, argv);
 	*argc -= 4;
 	*argv += 3;
 }

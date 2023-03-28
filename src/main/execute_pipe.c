@@ -25,7 +25,7 @@ void	execute_pipe(int argc, char **argv, char **envp, char **paths)
 		command_arr = ft_split(argv[index], ' ');
 		path = is_command_executable(command_arr[0], paths);
 		if (!path)
-			write_exception(404, command_arr[0], 0);
+			write_exception(404, command_arr[0], 0, 0);
 		if (index != (argc - 1))
 			pipe_commands(path, command_arr, envp);
 		else
@@ -33,6 +33,8 @@ void	execute_pipe(int argc, char **argv, char **envp, char **paths)
 			pid = fork();
 			if (!pid)
 				exit(execve(path, command_arr, envp));
+			else
+				wait(NULL);
 		}
 		free_s(&path);
 		free_d(&command_arr);

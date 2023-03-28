@@ -93,7 +93,6 @@ void	file_check(int *argc, char ***argv)
 	int	last_index;
 
 	last_index = (*argc - 1);
-	permission_check(argc, argv);
 	if (!ft_strcmp((*argv)[1], "here_doc"))
 	{
 		fd1 = open((*argv)[last_index], O_WRONLY | O_APPEND | O_CREAT, 0755);
@@ -101,10 +100,17 @@ void	file_check(int *argc, char ***argv)
 		duplicate_fd(fd1, 1);
 		return ;
 	}
-	fd0 = open((*argv)[1], O_RDONLY);
+	if(!permission_check(argc, argv))
+		fd0 = open((*argv)[1], O_RDONLY);
+	else
+	{
+		fd0 = open("/dev/null", O_RDONLY);
+		*argv += 1;
+		*argc -= 1;
+	}
 	fd1 = open((*argv)[last_index], O_WRONLY | O_TRUNC | O_CREAT, 0755);
-	duplicate_fd(fd0, 0);
-	duplicate_fd(fd1, 1);
+	dup2(fd0, 0);
+	dup2(fd1, 1);
 	*argv += 2;
 	*argc -= 3;
 }
