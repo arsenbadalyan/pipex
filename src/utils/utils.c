@@ -66,25 +66,20 @@ char	**split_cmd(char *command)
 int	permission_check(int *argc, char ***argv)
 {
 	int	last_index;
+	int	has_error;
 
 	last_index = (*argc - 1);
-	if (ft_strcmp((*argv)[1], "here_doc")
-		&& access((*argv)[1], F_OK) == -1)
+	has_error = 0;
+	if (access((*argv)[last_index], W_OK))
+		has_error += 2;
+	if (ft_strcmp((*argv)[1], "here_doc"))
 	{
-		write_exception(2, (*argv)[1], 0, 0);
-		return (1);
+		if (access((*argv)[1], F_OK) == -1 && ++has_error)
+			write_exception(2, (*argv)[1], 0, 0);
+		else if (access((*argv)[1], R_OK) == -1 && ++has_error)
+			write_exception(13, (*argv)[1], 0, 0);
 	}
-	if (ft_strcmp((*argv)[1], "here_doc")
-		&& access((*argv)[1], R_OK) == -1)
-	{
-		if (!access((*argv)[last_index], F_OK)
-		&& access((*argv)[last_index], W_OK))
-			write_exception(13, (*argv)[1], (*argv)[last_index], 1);
-		write_exception(13, (*argv)[1], 0, 0);
-		return (1);
-	}	
-	if (!access((*argv)[last_index], F_OK)
-		&& access((*argv)[last_index], W_OK))
+	if (has_error > 1)
 		write_exception(13, (*argv)[last_index], 0, 1);
-	return (0);
+	return (has_error);
 }

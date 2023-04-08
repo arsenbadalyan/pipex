@@ -26,7 +26,7 @@ void	execute_pipe(int argc, char **argv, char **envp, char **paths)
 		path = is_command_executable(command_arr[0], paths);
 		if (!path)
 			write_exception(404, command_arr[0], 0, 0);
-		if (index != (argc - 1))
+		if (index++ != (argc - 1))
 			pipe_commands(path, command_arr, envp);
 		else
 		{
@@ -38,7 +38,6 @@ void	execute_pipe(int argc, char **argv, char **envp, char **paths)
 		}
 		free_s(&path);
 		free_d(&command_arr);
-		index++;
 	}
 }
 
@@ -54,11 +53,13 @@ void	pipe_commands(char *path, char **command, char **envp)
 		close(fd[1]);
 		dup2(fd[0], 0);
 		wait(NULL);
+		close(fd[0]);
 	}
 	else
 	{
 		close(fd[0]);
 		dup2(fd[1], 1);
 		exit(execve(path, command, envp));
+		close(fd[1]);
 	}
 }

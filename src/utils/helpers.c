@@ -100,7 +100,8 @@ void	file_check(int *argc, char ***argv)
 		duplicate_fd(fd1, 1);
 		return ;
 	}
-	if(!permission_check(argc, argv))
+	fd1 = open((*argv)[last_index], O_WRONLY | O_TRUNC | O_CREAT, 0755);
+	if (!permission_check(argc, argv))
 		fd0 = open((*argv)[1], O_RDONLY);
 	else
 	{
@@ -108,7 +109,6 @@ void	file_check(int *argc, char ***argv)
 		*argv += 1;
 		*argc -= 1;
 	}
-	fd1 = open((*argv)[last_index], O_WRONLY | O_TRUNC | O_CREAT, 0755);
 	dup2(fd0, 0);
 	dup2(fd1, 1);
 	*argv += 2;
