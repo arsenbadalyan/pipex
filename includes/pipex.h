@@ -49,6 +49,6 @@ char	*free_d(char ***addr);
 void	write_exception(int errno, char *addn, char *addn2, int is_exit);
 void	duplicate_fd(int fd_from, int fd_to);
 char	**split_cmd(char *command);
-int 	permission_check(int *argc, char ***argv);
+int		permission_check(int *argc, char ***argv);
 
 #endif
